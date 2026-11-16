@@ -347,13 +347,16 @@ h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 3.4
 
 footer { padding-block: 24px; font-size: 13px; color: var(--muted); }
 footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand-mark { overflow: hidden; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); }
+.brand-mark img, .avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.avatar { box-shadow: 0 0 0 1px var(--accent), 0 0 0 6px var(--accent-soft); }
 </style>
 
 <canvas id="net" aria-hidden="true"></canvas>
 
 <header class="bar" data-part>
   <div class="inner">
-    <a class="brand" href="#topo"><span class="brand-mark">HM</span>Higor Mendonça</a>
+    <a class="brand" href="#topo"><span class="brand-mark"><img src="foto-avatar.jpg" alt="" width="32" height="32"></span>Higor Mendonça</a>
     <nav aria-label="Seções">
       <a href="#atuacao">Atuação</a>
       <a href="#metodo">Método</a>
@@ -372,7 +375,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     <div class="inner">
       <div class="hero-copy">
         <div class="who">
-          <div class="avatar" aria-hidden="true">HM</div>
+          <div class="avatar"><img src="foto-avatar.jpg" alt="Foto de Higor Mendonça" width="84" height="84"></div>
           <span class="status"><i></i>Atuando na Woodpel Embalagens</span>
         </div>
         <h1>Higor Mendonça</h1>
