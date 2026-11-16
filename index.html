@@ -350,6 +350,38 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
 .brand-mark { overflow: hidden; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); }
 .brand-mark img, .avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .avatar { box-shadow: 0 0 0 1px var(--accent), 0 0 0 6px var(--accent-soft); }
+/* server rack: each tool is one 1U unit; U numbers on the rail like a real 19" rack */
+.rack { margin-top: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(180deg, rgba(14, 22, 33, .92), rgba(8, 14, 22, .92)); padding: 0 0 12px; overflow: hidden; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.rack-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 16px; margin-bottom: 12px; border-bottom: 1px solid var(--line); background: rgba(32, 47, 64, .5); font: 11.5px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.rack-live { display: inline-flex; align-items: center; gap: 8px; color: var(--signal); }
+.rack-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 3px rgba(79, 209, 139, .2); }
+.ru-list { list-style: none; margin: 0; padding: 0 12px; display: grid; gap: 6px; }
+.ru { display: grid; grid-template-columns: 30px 16px minmax(0, 1fr) 16px; align-items: stretch; min-height: 60px; }
+.ru .u { align-self: center; font: 10.5px var(--f-mono); color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+.ear { background: radial-gradient(circle, #05090f 2.2px, transparent 2.6px) center 25% / 100% 50% repeat-y, #1a2430; border-block: 1px solid #263243; }
+.ru .ear:first-of-type { border-left: 1px solid #263243; border-radius: 3px 0 0 3px; }
+.ru .ear:last-child { border-right: 1px solid #263243; border-radius: 0 3px 3px 0; }
+.face {
+  display: flex; align-items: center; gap: 16px; padding: 8px 16px; min-width: 0;
+  background: linear-gradient(180deg, #1b2634, #121b26); border: 1px solid #263243;
+  transition: transform .35s cubic-bezier(.3, .7, .2, 1), box-shadow .35s, border-color .35s;
+}
+.ru:hover .face { transform: translateY(-2px) scale(1.012); border-color: var(--accent); box-shadow: 0 14px 30px -12px rgba(0, 0, 0, .8), 0 0 0 1px rgba(82, 195, 223, .25); }
+.leds { display: grid; gap: 5px; flex: none; }
+.leds i { width: 6px; height: 6px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 6px rgba(79, 209, 139, .7); }
+.leds i.act { background: var(--accent); box-shadow: 0 0 6px rgba(82, 195, 223, .8); animation: act var(--sp, 1.3s) steps(2) infinite; }
+.ru:hover .leds i.act { animation-duration: .35s; }
+@keyframes act { 50% { opacity: .2; } }
+.face .ico { width: 34px; height: 34px; flex: none; border-radius: 4px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.face .ico svg { width: 20px; height: 20px; display: block; }
+.face .txt { min-width: 0; }
+.face b { display: block; font-weight: 600; font-size: 15px; line-height: 1.3; }
+.face small { display: block; color: var(--muted); font: 12px/1.4 var(--f-mono); }
+.bays { margin-left: auto; display: flex; gap: 4px; flex: none; }
+.bays i { width: 22px; height: 30px; border-radius: 2px; background: repeating-linear-gradient(180deg, #0b1219 0 2px, #16202c 2px 4px); border: 1px solid #263243; }
+.ru-state { flex: none; font: 11px var(--f-mono); color: var(--signal); letter-spacing: .06em; }
+@media (max-width: 760px) { .bays { display: none; } .face { gap: 12px; } }
+@media (max-width: 460px) { .ru { grid-template-columns: 0 12px minmax(0, 1fr) 12px; } .ru .u { visibility: hidden; } .ru-state { display: none; } }
 </style>
 
 <canvas id="net" aria-hidden="true"></canvas>
@@ -474,13 +506,16 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
       </div>
 
       <h3 class="stack-title">Ferramentas e sistemas do dia a dia</h3>
-      <div class="stack">
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8.5" height="8.5" fill="#f25022"/><rect x="12.5" y="3" width="8.5" height="8.5" fill="#7fba00"/><rect x="3" y="12.5" width="8.5" height="8.5" fill="#00a4ef"/><rect x="12.5" y="12.5" width="8.5" height="8.5" fill="#ffb900"/></svg></span><div><b>Microsoft</b><small>Administração do ambiente</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg></span><div><b>E-mail corporativo</b><small>Contas e acessos</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.8"/><path d="M4 5.5v13c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8v-13"/><path d="M4 12c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8"/></svg></span><div><b>ERP</b><small>Sistema de gestão da indústria</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5z"/><path d="M15 6.5v11" stroke-dasharray="1.5 2.2"/><path d="M7 10.5h5M7 13.5h3"/></svg></span><div><b>Sistema de chamados</b><small>Registro e acompanhamento</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="7" rx="1.5"/><rect x="3" y="13.5" width="18" height="7" rx="1.5"/><path d="M7 7h.01M7 17h.01M11 7h6M11 17h6"/></svg></span><div><b>Servidores</b><small>Administração</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v4.5M5.5 16.5V13h13v3.5"/></svg></span><div><b>Redes</b><small>Apoio à infraestrutura</small></div></div>
+      <div class="rack">
+        <div class="rack-head"><span>RACK-01 · 6U</span><span class="rack-live"><i></i>6/6 em operação</span></div>
+        <ol class="ru-list">
+          <li class="ru" data-net="sistemas"><span class="u">U6</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:1.1s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8.5" height="8.5" fill="#f25022"/><rect x="12.5" y="3" width="8.5" height="8.5" fill="#7fba00"/><rect x="3" y="12.5" width="8.5" height="8.5" fill="#00a4ef"/><rect x="12.5" y="12.5" width="8.5" height="8.5" fill="#ffb900"/></svg></span><div class="txt"><b>Microsoft</b><small>Administração do ambiente</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+          <li class="ru" data-net="contato"><span class="u">U5</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:1.6s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg></span><div class="txt"><b>E-mail corporativo</b><small>Contas e acessos</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+          <li class="ru" data-net="sistemas"><span class="u">U4</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:.9s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.8"/><path d="M4 5.5v13c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8v-13"/><path d="M4 12c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8"/></svg></span><div class="txt"><b>ERP</b><small>Sistema de gestão da indústria</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+          <li class="ru" data-net="suporte"><span class="u">U3</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:1.3s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5z"/><path d="M15 6.5v11" stroke-dasharray="1.5 2.2"/><path d="M7 10.5h5M7 13.5h3"/></svg></span><div class="txt"><b>Sistema de chamados</b><small>Registro e acompanhamento</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+          <li class="ru" data-net="infra"><span class="u">U2</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:.7s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="7" rx="1.5"/><rect x="3" y="13.5" width="18" height="7" rx="1.5"/><path d="M7 7h.01M7 17h.01M11 7h6M11 17h6"/></svg></span><div class="txt"><b>Servidores</b><small>Administração</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+          <li class="ru" data-net="infra"><span class="u">U1</span><span class="ear"></span><div class="face"><span class="leds" aria-hidden="true"><i></i><i class="act" style="--sp:.5s"></i></span><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v4.5M5.5 16.5V13h13v3.5"/></svg></span><div class="txt"><b>Redes</b><small>Apoio à infraestrutura</small></div><span class="bays" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="ru-state">ONLINE</span></div><span class="ear"></span></li>
+        </ol>
       </div>
     </div>
   </section>
@@ -877,7 +912,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   tip.className = 'net-tip';
   tip.hidden = true;
   document.body.appendChild(tip);
-  const BLOCK = 'a, button, input, label, .pc, .term, .hud, .area, .tool, .steps, .company, .links, .net-tip';
+  const BLOCK = 'a, button, input, label, .pc, .term, .hud, .area, .tool, .rack, .steps, .company, .links, .net-tip';
   function nearest(x, y) {
     let best = null, bd = 22;
     for (const n of nodes) { const d = Math.hypot(n.x - x, n.y - y); if (d < bd) { bd = d; best = n; } }
@@ -1221,6 +1256,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     'Conectar no LinkedIn': 'Connect on LinkedIn',
     'E-mail corporativo': 'Corporate e-mail', 'Contas e acessos': 'Accounts and access',
     'Sistema de gestão da indústria': 'Manufacturing management system',
+    '6/6 em operação': '6/6 running',
     'Ver áreas de atuação': 'See areas of expertise',
     'Velocidade': 'Speed',
     'O código na tela é o código real desta página: primeiro o HTML, depois o CSS.': 'The code on screen is the real code of this page: first the HTML, then the CSS.',
