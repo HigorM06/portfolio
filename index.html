@@ -1,4 +1,9 @@
 <title>Higor Mendonça</title>
+<meta name="description" content="Higor Mendonça, analista de infraestrutura em Indaiatuba (SP): servidores, ambiente Microsoft, e-mail corporativo, ERP, redes e suporte técnico.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Higor Mendonça · Analista de Infraestrutura">
+<meta property="og:description" content="Redes, servidores e suporte técnico. Portfólio com rede ao vivo e agentes construindo o site.">
+<meta property="og:locale" content="pt_BR">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,6 +56,61 @@ a { color: var(--accent); text-underline-offset: 3px; }
 main, .contact, footer { position: relative; z-index: 1; }
 .bar, .area, .tool, .steps, .company, .status, .pc-ctl, .btn { -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .pv-site * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+
+/* bar tools: terminal + language */
+.bar nav { margin-left: auto; }
+.bar-tools { display: flex; gap: 6px; }
+.tool-btn { font: 500 12px var(--f-mono); color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+.tool-btn:hover { border-color: var(--accent); }
+.lang-btn span { opacity: .5; }
+html:not([lang="en"]) .lang-btn [data-l="pt"], html[lang="en"] .lang-btn [data-l="en"] { opacity: 1; color: var(--accent); }
+
+/* live status pill + pause */
+.hud {
+  position: fixed; z-index: 15;
+  left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px);
+  padding: 5px 5px 5px 12px; font: 12px var(--f-mono); color: var(--muted);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.hud-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 3px rgba(79, 209, 139, .2); }
+html[data-paused] .hud-dot { background: var(--muted); box-shadow: none; }
+#hud-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.hud button { font: inherit; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; cursor: pointer; white-space: nowrap; flex: none; }
+.hud button:hover { border-color: var(--accent); }
+html[data-paused] *, html[data-paused] *::before, html[data-paused] *::after { animation-play-state: paused !important; }
+footer { padding-bottom: 80px; }
+
+/* device tooltip on the background network */
+.net-tip { position: fixed; z-index: 16; pointer-events: none; transform: translate(14px, 14px); max-width: 240px; padding: 6px 9px; font: 11px/1.5 var(--f-mono); color: var(--ink); background: rgba(8, 16, 26, .94); border: 1px solid var(--accent); border-radius: 6px; }
+.net-tip b { display: block; color: var(--accent); font-weight: 500; }
+.net-tip span { color: var(--muted); }
+
+/* demo terminal */
+.term {
+  position: fixed; z-index: 20;
+  right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: min(560px, calc(100vw - 32px)); height: min(380px, 70vh);
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  background: rgba(7, 13, 21, .97); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .8);
+  font: 13px/1.55 var(--f-mono); color: #c9d1d9;
+}
+.term:focus-within { border-color: var(--accent); }
+.term-head { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #101925; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.term-head .dots i { background: #30363d; }
+.term-head b { flex: 1; font-weight: 500; }
+.term-x { background: none; border: 0; color: var(--muted); font-size: 18px; line-height: 1; padding: 0 4px; cursor: pointer; }
+.term-x:hover { color: var(--ink); }
+.term-out { overflow-y: auto; padding: 10px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.term-out .cmd { color: var(--accent); }
+.term-out .ok { color: #4fd18b; }
+.term-out .warn { color: #e8822e; }
+.term-out .dim { color: #7d8590; }
+.term-in { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--line); }
+.term-in label { color: var(--signal); }
+.term-in input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #e6edf3; font: inherit; }
 
 /* top bar */
 .bar {
@@ -296,11 +356,15 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
       <a href="#experiencia">Experiência</a>
       <a href="#contato">Contato</a>
     </nav>
+    <div class="bar-tools">
+      <button type="button" class="tool-btn" id="btn-term" aria-label="Abrir terminal">&gt;_ Terminal</button>
+      <button type="button" class="tool-btn lang-btn" id="btn-lang" aria-label="Mudar idioma"><span data-l="pt">PT</span> / <span data-l="en">EN</span></button>
+    </div>
   </div>
 </header>
 
 <main id="topo" data-part>
-  <section class="hero">
+  <section class="hero" data-net="all">
     <div class="inner">
       <div class="hero-copy">
         <div class="who">
@@ -356,7 +420,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     <p class="cable-caption">T568B · pinos 1–8</p>
   </div>
 
-  <section class="block" id="atuacao">
+  <section class="block" id="atuacao" data-net="all">
     <div class="inner">
       <div class="sec-head">
         <p class="eyebrow">Áreas de atuação</p>
@@ -364,7 +428,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
         <p>Meu trabalho cobre quatro frentes: servidores e rede, sistemas corporativos, atendimento ao usuário e desenvolvimento.</p>
       </div>
       <div class="areas">
-        <article class="area">
+        <article class="area" data-net="infra">
           <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h.01M7 17.5h.01"/></svg></div>
           <h3>Servidores e redes</h3>
           <p>A base que mantém sistemas e equipamentos conectados e disponíveis.</p>
@@ -374,7 +438,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
             <li>Configuração de equipamentos de rede e estações de trabalho</li>
           </ul>
         </article>
-        <article class="area">
+        <article class="area" data-net="sistemas">
           <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
           <h3>Sistemas corporativos</h3>
           <p>Os sistemas que a empresa usa todos os dias, configurados e funcionando.</p>
@@ -384,7 +448,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
             <li>Suporte ao ERP da empresa</li>
           </ul>
         </article>
-        <article class="area">
+        <article class="area" data-net="suporte">
           <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="14" width="5" height="7" rx="1.5"/><rect x="17" y="14" width="5" height="7" rx="1.5"/></svg></div>
           <h3>Suporte ao usuário</h3>
           <p>Atendimento organizado, do registro do chamado à solução.</p>
@@ -394,7 +458,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
             <li>Configuração de computadores e periféricos</li>
           </ul>
         </article>
-        <article class="area">
+        <article class="area" data-net="dev">
           <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/></svg></div>
           <h3>Desenvolvimento de sistemas</h3>
           <span class="tag">Em formação</span>
@@ -414,7 +478,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     </div>
   </section>
 
-  <section class="block" id="metodo">
+  <section class="block" id="metodo" data-net="suporte">
     <div class="inner">
       <div class="sec-head">
         <p class="eyebrow">Método</p>
@@ -430,7 +494,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     </div>
   </section>
 
-  <section class="block" id="experiencia">
+  <section class="block" id="experiencia" data-net="all">
     <div class="inner">
       <div class="sec-head">
         <p class="eyebrow">Experiência e formação</p>
@@ -470,7 +534,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   </section>
 </main>
 
-<section class="contact" id="contato" data-part>
+<section class="contact" id="contato" data-part data-net="contato">
   <div class="inner">
     <div class="contact-copy">
       <p class="eyebrow">Contato</p>
@@ -488,15 +552,30 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   <div class="inner"><span>Higor Mendonça · Analista de Infraestrutura</span><span>Indaiatuba, SP</span></div>
 </footer>
 
+<div class="hud" id="hud">
+  <span class="hud-dot" aria-hidden="true"></span>
+  <span id="hud-text" data-dyn>Rede ao vivo · simulação</span>
+  <button type="button" id="btn-pause" aria-pressed="false" data-dyn>Pausar animações</button>
+</div>
+
+<div class="term" id="term" role="dialog" aria-labelledby="term-title" hidden>
+  <div class="term-head"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><b id="term-title">higor@infra: ~</b><button type="button" class="term-x" id="term-close" aria-label="Fechar terminal">×</button></div>
+  <div class="term-out" id="term-out" aria-live="polite"></div>
+  <form class="term-in" id="term-form"><label for="term-input">$</label><input id="term-input" type="text" autocomplete="off" spellcheck="false" autocapitalize="off"></form>
+</div>
+
 <script>
 (function () {
   // live network background: simulated topology with packets moving between devices
   const cv = document.getElementById('net');
   if (!cv || !cv.getContext) return;
   const ctx = cv.getContext('2d');
+  const root = document.documentElement;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const COL = { teal: '#52c3df', orange: '#e8822e', green: '#4fd18b', violet: '#9d8cf0' };
+  const COL = { teal: '#52c3df', orange: '#e8822e', green: '#4fd18b', violet: '#9d8cf0', yellow: '#f2c94c', white: '#ffffff' };
+  const T = (pt, en) => (root.lang === 'en' ? en : pt);
   let W = 0, H = 0, nodes = [], links = [], packets = [], rings = [], byName = {}, time = 0;
+  let mode = 'all', hovered = null;
 
   function add(type, x, y, name, parent) {
     const n = { type, x, y, name, parent, phase: Math.random() * 6.28, flash: 0 };
@@ -517,7 +596,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     W = window.innerWidth; H = window.innerHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    nodes = []; links = []; packets = []; rings = []; byName = {};
+    nodes = []; links = []; packets = []; rings = []; byName = {}; hovered = null;
     const small = W < 720;
     const cx = W / 2, cy = H * 0.54;
     const inet = add('cloud', cx, Math.max(40, H * 0.08), 'INTERNET', null);
@@ -533,7 +612,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
       const sx = clampX(cx + Math.cos(a) * rx), sy = clampY(cy + Math.sin(a) * ry);
       const isDC = i === (small ? 1 : 2);
       const sw = add(isDC ? 'dc' : 'sw', sx, sy, isDC ? 'SW-DC' : 'SW-0' + (i + 1), core);
-      const kids = isDC ? ['SRV-ERP', 'SRV-01', 'SRV-02', 'SRV-BKP'] : null;
+      const kids = isDC ? ['SRV-ERP', 'SRV-CHAMADOS', 'SRV-ARQ', 'SRV-BKP'] : null;
       const count = isDC ? kids.length : (small ? 2 : 3 + (i % 2));
       for (let j = 0; j < count; j++) {
         const spread = (j - (count - 1) / 2) * (small ? 0.55 : 0.42);
@@ -548,7 +627,40 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
       }
       ipNet++;
     }
-    if (reduce) draw(0);
+    if (reduce) draw();
+  }
+
+  // which devices each part of the page talks about
+  function isFocus(n) {
+    switch (mode) {
+      case 'infra': return ['core', 'sw', 'dc', 'srv', 'fw'].includes(n.type);
+      case 'sistemas': return ['SRV-ERP', 'INTERNET', 'FW-01', 'CORE-01', 'SW-DC'].includes(n.name);
+      case 'suporte': return ['pc', 'nb', 'prn', 'ap'].includes(n.type) || n.name === 'SRV-CHAMADOS';
+      case 'dev': return n.name === 'SRV-ERP' || n.type === 'pc' || n.type === 'nb';
+      case 'contato': return n.name === 'INTERNET' || n.name === 'FW-01';
+      default: return false;
+    }
+  }
+  function role(n) {
+    const map = {
+      cloud: T('Internet · e-mail corporativo', 'Internet · corporate e-mail'),
+      fw: T('Firewall de borda', 'Edge firewall'),
+      core: T('Switch principal (core)', 'Core switch'),
+      sw: T('Switch de acesso', 'Access switch'),
+      dc: T('Switch dos servidores', 'Server switch'),
+      pc: T('Estação de trabalho', 'Workstation'),
+      nb: T('Notebook', 'Laptop'),
+      ap: T('Access point Wi-Fi', 'Wi-Fi access point'),
+      prn: T('Impressora de rede', 'Network printer'),
+      cam: T('Câmera IP', 'IP camera')
+    };
+    const srv = {
+      'SRV-ERP': T('Servidor do ERP', 'ERP server'),
+      'SRV-CHAMADOS': T('Sistema de chamados', 'Ticketing system'),
+      'SRV-ARQ': T('Servidor de arquivos', 'File server'),
+      'SRV-BKP': T('Servidor de backup', 'Backup server')
+    };
+    return n.type === 'srv' ? srv[n.name] : map[n.type];
   }
 
   function chain(n) { const a = []; while (n) { a.push(n); n = n.parent; } return a; }
@@ -558,19 +670,29 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     return A.slice(0, A.indexOf(lca) + 1).concat(B.slice(0, B.indexOf(lca)).reverse());
   }
   const endpoints = () => nodes.filter(x => ['pc', 'nb', 'ap', 'prn', 'cam'].includes(x.type));
+  const users = () => nodes.filter(x => x.type === 'pc' || x.type === 'nb');
   const servers = () => nodes.filter(x => x.type === 'srv');
   const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-  function send(s, d, color, reply) {
-    if (!s || !d || s === d) return;
-    packets.push({ path: route(s, d), i: 0, t: 0, color, reply, speed: 150 + Math.random() * 90 });
+  function send(s, d, color, reply, speed) {
+    if (!s || !d || s === d) return null;
+    const path = route(s, d);
+    packets.push({ path, i: 0, t: 0, color, reply, speed: speed || 150 + Math.random() * 90 });
+    return path;
   }
   function spawn() {
     const r = Math.random(), eps = endpoints(), srvs = servers();
-    if (r < 0.38) send(pick(eps), byName['SRV-ERP'] || pick(srvs), COL.teal, COL.green);
-    else if (r < 0.62) send(pick(eps), byName['INTERNET'], COL.orange, COL.orange);
-    else if (r < 0.82) send(pick(eps), pick(eps), COL.violet, null);
-    else send(pick(srvs), byName['SRV-BKP'] || pick(srvs), COL.green, null);
+    if (mode === 'suporte' && r < 0.6) return send(pick(users()), byName['SRV-CHAMADOS'], COL.yellow, COL.green);
+    if (mode === 'sistemas' && r < 0.45) return send(pick(eps), byName['SRV-ERP'], COL.teal, COL.green);
+    if (mode === 'sistemas' && r < 0.8) return send(pick(users()), byName['INTERNET'], COL.orange, COL.orange);
+    if (mode === 'infra' && r < 0.5) return send(pick(srvs), byName['SRV-BKP'], COL.green, COL.teal);
+    if (mode === 'dev' && r < 0.55) return send(pick(users()), byName['SRV-ERP'], COL.violet, COL.violet);
+    if (mode === 'contato' && r < 0.5) return send(pick(users()), byName['INTERNET'], COL.orange, COL.orange);
+    const q = Math.random();
+    if (q < 0.38) send(pick(eps), byName['SRV-ERP'], COL.teal, COL.green);
+    else if (q < 0.62) send(pick(eps), byName['INTERNET'], COL.orange, COL.orange);
+    else if (q < 0.82) send(pick(eps), pick(eps), COL.violet, null);
+    else send(pick(srvs), byName['SRV-BKP'], COL.green, null);
   }
 
   function linkOf(a, b) { return b.parent === a ? b.link : a.link; }
@@ -590,7 +712,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
           packets.splice(k, 1);
           b.flash = 1;
           rings.push({ x: b.x, y: b.y, r: 4, color: p.color });
-          if (p.reply && Math.random() < 0.7) setTimeout(() => send(b, p.path[0], p.reply, null), 120 + Math.random() * 300);
+          if (p.reply && Math.random() < 0.75) setTimeout(() => send(b, p.path[0], p.reply, null, p.speed), 120 + Math.random() * 300);
         }
       }
     }
@@ -600,15 +722,22 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   // device icons
   function rect(x, y, w, h) { ctx.beginPath(); ctx.rect(x - w / 2, y - h / 2, w, h); ctx.fill(); ctx.stroke(); }
   function led(x, y, on, c) { ctx.fillStyle = on ? c : 'rgba(80,110,130,.5)'; ctx.fillRect(x - 1.5, y - 1.5, 3, 3); }
-  function icon(n) {
+  function icon(n, focus) {
     const { x, y } = n;
     const blink = Math.sin(time * (3 + n.phase) + n.phase) > -0.2;
-    const glow = n.flash;
+    const glow = Math.max(n.flash, n === hovered ? 0.8 : 0);
+    if (focus) {
+      ctx.save();
+      ctx.globalAlpha = 0.16 + 0.08 * Math.sin(time * 3 + n.phase);
+      ctx.fillStyle = COL.teal;
+      ctx.beginPath(); ctx.arc(x, y, 24, 0, 6.28); ctx.fill();
+      ctx.restore();
+    }
     ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(82,195,223,' + (0.42 + glow * 0.5) + ')';
+    ctx.strokeStyle = 'rgba(82,195,223,' + (0.42 + glow * 0.5 + (focus ? 0.3 : 0)) + ')';
     ctx.fillStyle = '#0e1a27';
     if (glow > 0) {
-      ctx.save(); ctx.globalAlpha = glow * 0.35; ctx.fillStyle = COL.teal;
+      ctx.save(); ctx.globalAlpha *= glow * 0.35; ctx.fillStyle = COL.teal;
       ctx.beginPath(); ctx.arc(x, y, 16 + glow * 6, 0, 6.28); ctx.fill(); ctx.restore();
       ctx.fillStyle = '#0e1a27';
     }
@@ -673,16 +802,17 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
         led(x - 7, y, Math.sin(time * 2) > 0, '#ff6b6b');
         break;
     }
-    ctx.fillStyle = 'rgba(160,192,214,' + (0.34 + glow * 0.4) + ')';
+    ctx.fillStyle = 'rgba(160,192,214,' + Math.min(1, 0.34 + glow * 0.4 + (focus ? 0.4 : 0)) + ')';
     ctx.fillText(n.name, x, y + (n.type === 'srv' ? 26 : 22));
   }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    // links: heavy uplinks drawn as a cable bundle
+    const dimmed = mode !== 'all';
     for (const l of links) {
       const { a, b } = l;
-      const alpha = 0.11 + l.heat * 0.32;
+      const on = dimmed && isFocus(a) && isFocus(b);
+      const alpha = (dimmed && !on ? 0.06 : 0.11) + l.heat * 0.32 + (on ? 0.12 : 0);
       ctx.strokeStyle = 'rgba(110,175,205,' + alpha + ')';
       ctx.lineWidth = 1;
       if (l.heavy) {
@@ -695,7 +825,6 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
     }
-    // packets with a short trail
     for (const p of packets) {
       const a = p.path[p.i], b = p.path[p.i + 1];
       const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
@@ -716,13 +845,18 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     ctx.globalAlpha = 1;
     ctx.font = '9px "JetBrains Mono", ui-monospace, Consolas, monospace';
     ctx.textAlign = 'center';
-    for (const n of nodes) icon(n);
+    for (const n of nodes) {
+      const focus = dimmed && isFocus(n);
+      ctx.globalAlpha = dimmed && !focus && n !== hovered ? 0.4 : 1;
+      icon(n, focus);
+    }
+    ctx.globalAlpha = 1;
   }
 
   let last = 0, acc = 0;
   function frame(ts) {
     requestAnimationFrame(frame);
-    if (document.hidden) { last = ts; return; }
+    if (document.hidden || root.hasAttribute('data-paused')) { last = ts; return; }
     const dt = Math.min(0.05, (ts - last) / 1000 || 0);
     last = ts; time += dt;
     acc += dt * (W < 720 ? 4 : 8);
@@ -730,6 +864,56 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     update(dt);
     draw();
   }
+
+  // hover a device to see what it is; click it to ping
+  const tip = document.createElement('div');
+  tip.className = 'net-tip';
+  tip.hidden = true;
+  document.body.appendChild(tip);
+  const BLOCK = 'a, button, input, label, .pc, .term, .hud, .area, .tool, .steps, .company, .links, .net-tip';
+  function nearest(x, y) {
+    let best = null, bd = 22;
+    for (const n of nodes) { const d = Math.hypot(n.x - x, n.y - y); if (d < bd) { bd = d; best = n; } }
+    return best;
+  }
+  function ping(from, to) {
+    const s = typeof from === 'string' ? byName[from.toUpperCase()] : from;
+    const d = typeof to === 'string' ? byName[to.toUpperCase()] : to;
+    const src = s || pick(users());
+    if (!d || src === d) return null;
+    src.flash = 1;
+    const path = send(src, d, COL.white, COL.white, 260);
+    return path ? path.map(n => n.name) : null;
+  }
+  window.addEventListener('mousemove', e => {
+    const n = e.target.closest && e.target.closest(BLOCK) ? null : nearest(e.clientX, e.clientY);
+    hovered = n;
+    document.body.style.cursor = n ? 'pointer' : '';
+    if (!n) { tip.hidden = true; return; }
+    tip.innerHTML = '<b>' + n.name + '</b>' + role(n) + '<br><span>' + T('Clique para enviar um ping', 'Click to send a ping') + '</span>';
+    tip.style.left = e.clientX + 'px';
+    tip.style.top = e.clientY + 'px';
+    tip.hidden = false;
+  }, { passive: true });
+  window.addEventListener('click', e => {
+    if (e.target.closest && e.target.closest(BLOCK)) return;
+    const n = nearest(e.clientX, e.clientY);
+    if (!n) return;
+    if (n.type === 'srv' || n.type === 'cloud' || n.type === 'fw') ping(null, n);
+    else ping(n, 'SRV-ERP');
+  });
+
+  window.netBg = {
+    setMode(m) { mode = m || 'all'; },
+    ping,
+    route(from, to) {
+      const s = byName[String(from).toUpperCase()] || pick(users());
+      const d = byName[String(to).toUpperCase()];
+      return d ? route(s, d).map(n => n.name) : null;
+    },
+    names() { return nodes.map(n => n.name); },
+    count() { return nodes.length; }
+  };
 
   build();
   let rt = 0;
@@ -951,7 +1135,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   let acc = 0;
   function tick() {
     requestAnimationFrame(tick);
-    if (!visible || document.hidden) return;
+    if (!visible || document.hidden || document.documentElement.hasAttribute('data-paused')) return;
     if (phase === 'done') {
       buildTo(1);
       if (built >= pieces.length && !resetting) {
@@ -1007,5 +1191,283 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     ed.scrollTop = ed.scrollHeight;
   }
   requestAnimationFrame(tick);
+})();
+</script>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const T = (pt, en) => (root.lang === 'en' ? en : pt);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* ---------- PT / EN ---------- */
+  const EN = {
+    'Atuação': 'Expertise', 'Método': 'Method', 'Experiência': 'Experience', 'Contato': 'Contact',
+    'Atuando na Woodpel Embalagens': 'Working at Woodpel Embalagens',
+    'Analista de Infraestrutura ·': 'Infrastructure Analyst ·',
+    'Analista de Infraestrutura': 'Infrastructure Analyst',
+    'Redes, Servidores e Suporte': 'Networks, Servers and Support',
+    'Administro servidores, o ambiente Microsoft, o e-mail corporativo e o ERP de uma indústria, apoio a infraestrutura de redes e atendo os usuários pelo sistema de chamados. Também estudo desenvolvimento de sistemas na Fatec.': 'I manage servers, the Microsoft environment, corporate e-mail and the ERP of a manufacturing company, support the network infrastructure and help users through the ticketing system. I also study software development at Fatec.',
+    'Conectar no LinkedIn': 'Connect on LinkedIn',
+    'E-mail corporativo': 'Corporate e-mail', 'Contas e acessos': 'Accounts and access',
+    'Sistema de gestão da indústria': 'Manufacturing management system',
+    'Ver áreas de atuação': 'See areas of expertise',
+    'Velocidade': 'Speed',
+    'O código na tela é o código real desta página: primeiro o HTML, depois o CSS.': 'The code on screen is the real code of this page: first the HTML, then the CSS.',
+    'T568B · pinos 1–8': 'T568B · pins 1–8',
+    'Áreas de atuação': 'Areas of expertise',
+    'Infraestrutura que sustenta a operação': 'Infrastructure that keeps operations running',
+    'Meu trabalho cobre quatro frentes: servidores e rede, sistemas corporativos, atendimento ao usuário e desenvolvimento.': 'My work covers four fronts: servers and network, business systems, user support and development.',
+    'Servidores e redes': 'Servers and networks',
+    'A base que mantém sistemas e equipamentos conectados e disponíveis.': 'The foundation that keeps systems and equipment connected and available.',
+    'Administração de servidores': 'Server administration',
+    'Apoio na infraestrutura de redes': 'Network infrastructure support',
+    'Configuração de equipamentos de rede e estações de trabalho': 'Setup of network equipment and workstations',
+    'Sistemas corporativos': 'Business systems',
+    'Os sistemas que a empresa usa todos os dias, configurados e funcionando.': 'The systems the company uses every day, configured and running.',
+    'Administração do ambiente Microsoft': 'Microsoft environment administration',
+    'Administração do e-mail corporativo': 'Corporate e-mail administration',
+    'Suporte ao ERP da empresa': 'Support for the company ERP',
+    'Suporte ao usuário': 'User support',
+    'Atendimento organizado, do registro do chamado à solução.': 'Organized support, from logging the ticket to solving it.',
+    'Atendimento pelo sistema de chamados': 'Support through the ticketing system',
+    'Apoio ao usuário em equipamentos, acessos e sistemas': 'Help with equipment, access and systems',
+    'Configuração de computadores e periféricos': 'Computer and peripheral setup',
+    'Desenvolvimento de sistemas': 'Software development',
+    'Em formação': 'In training',
+    'Estudo Análise e Desenvolvimento de Sistemas na Fatec para unir a visão de infraestrutura com a de software.': 'Studying Systems Analysis and Development at Fatec to combine an infrastructure view with a software one.',
+    'Ferramentas e sistemas do dia a dia': 'Everyday tools and systems',
+    'Administração do ambiente': 'Environment administration',
+    'Provedor de e-mail corporativo': 'Corporate e-mail provider',
+    'Sistema de chamados': 'Ticketing system',
+    'Registro e acompanhamento': 'Logging and tracking',
+    'Servidores': 'Servers', 'Administração': 'Administration', 'Redes': 'Networks',
+    'Apoio à infraestrutura': 'Infrastructure support',
+    'Como trato um chamado': 'How I handle a ticket',
+    'Cada atendimento segue a mesma ordem, para que o problema seja resolvido e não volte.': 'Every request follows the same order, so the problem gets solved and stays solved.',
+    'Registro': 'Logging',
+    'Abrir o chamado no sistema com o relato do usuário, quem é afetado e a urgência.': 'Open the ticket with the user’s report, who is affected and how urgent it is.',
+    'Diagnóstico': 'Diagnosis',
+    'Isolar a causa camada por camada: cabo, rede, equipamento, sistema.': 'Isolate the cause layer by layer: cable, network, device, system.',
+    'Solução': 'Fix',
+    'Corrigir, testar com o usuário e confirmar que a operação voltou ao normal.': 'Fix it, test with the user and confirm operations are back to normal.',
+    'Documentação': 'Documentation',
+    'Registrar o que foi feito para agilizar casos parecidos no futuro.': 'Record what was done to speed up similar cases in the future.',
+    'Experiência e formação': 'Experience and education',
+    'Trajetória': 'Career',
+    'Atual': 'Current',
+    'Administração de servidores, do ambiente Microsoft, do e-mail corporativo e do ERP; apoio na infraestrutura de redes; configuração de equipamentos; atendimento aos usuários pelo sistema de chamados.': 'Administration of servers, the Microsoft environment, corporate e-mail and the ERP; network infrastructure support; equipment setup; user support through the ticketing system.',
+    'Formação': 'Education',
+    'Indústria de embalagens de papelão ondulado.': 'Corrugated cardboard packaging manufacturer.',
+    'Faculdade de Tecnologia de Indaiatuba': 'Indaiatuba College of Technology',
+    'Tecnólogo em Análise e Desenvolvimento de Sistemas · 2024–2027, em andamento.': 'Technology degree in Systems Analysis and Development · 2024–2027, in progress.',
+    'Onde trabalho': 'Where I work',
+    'Indústria de embalagens de papelão ondulado.': 'A manufacturer that designs and produces corrugated cardboard boxes and custom industrial packaging, made entirely in Brazil.',
+    'Unidades': 'Sites', 'Produtos': 'Products', 'Serviços': 'Services',
+    'Automotivo': 'Automotive', 'Mineração': 'Mining', 'Metalurgia': 'Metalworking', 'Alimentos': 'Food', 'Farmacêutico': 'Pharmaceutical', 'Tecnologia': 'Technology',
+    'Vamos conversar sobre infraestrutura': 'Let’s talk infrastructure',
+    'Para oportunidades, troca de experiências ou projetos de infraestrutura, sistemas e suporte, fale comigo pelo LinkedIn.': 'For opportunities, sharing experience or infrastructure, systems and support projects, reach me on LinkedIn.',
+    'Seções': 'Sections', 'Velocidade da animação': 'Animation speed', 'Setores atendidos': 'Industries served',
+    'Mudar idioma': 'Change language', 'Abrir terminal': 'Open terminal', 'Fechar terminal': 'Close terminal'
+  };
+  const origText = new WeakMap();
+  const origAttr = new WeakMap();
+  function translate(lang) {
+    root.lang = lang === 'en' ? 'en' : 'pt-BR';
+    const scope = document.querySelectorAll('[data-part], .hud, .term');
+    scope.forEach(part => {
+      const tw = document.createTreeWalker(part, NodeFilter.SHOW_TEXT);
+      let n;
+      while ((n = tw.nextNode())) {
+        if (n.parentElement && n.parentElement.closest('.ed-body, .term-out, [data-dyn]')) continue;
+        if (!origText.has(n)) {
+          const k = n.nodeValue.trim();
+          if (!k || !(k in EN)) continue;
+          origText.set(n, n.nodeValue);
+        }
+        const o = origText.get(n), k = o.trim();
+        n.nodeValue = lang === 'en' ? o.replace(k, EN[k]) : o;
+      }
+      part.querySelectorAll('[aria-label]').forEach(el => {
+        if (!origAttr.has(el)) { const v = el.getAttribute('aria-label'); if (!(v in EN)) return; origAttr.set(el, v); }
+        const v = origAttr.get(el);
+        el.setAttribute('aria-label', lang === 'en' ? EN[v] : v);
+      });
+    });
+    store.set('site-lang', lang);
+    document.dispatchEvent(new CustomEvent('langchange'));
+  }
+  const langBtn = document.getElementById('btn-lang');
+  if (langBtn) langBtn.addEventListener('click', () => translate(root.lang === 'en' ? 'pt' : 'en'));
+
+  /* ---------- pause all animations ---------- */
+  const pauseBtn = document.getElementById('btn-pause');
+  const hudText = document.getElementById('hud-text');
+  function paused() { return root.hasAttribute('data-paused'); }
+  function renderPause() {
+    if (!pauseBtn) return;
+    pauseBtn.setAttribute('aria-pressed', String(paused()));
+    pauseBtn.textContent = paused() ? T('Retomar animações', 'Resume animations') : T('Pausar animações', 'Pause animations');
+  }
+  function setPaused(p) {
+    if (p) root.setAttribute('data-paused', ''); else root.removeAttribute('data-paused');
+    store.set('anim-paused', p ? '1' : '0');
+    renderPause();
+  }
+  if (pauseBtn) pauseBtn.addEventListener('click', () => setPaused(!paused()));
+
+  /* ---------- background network follows the section being read ---------- */
+  const MODES = {
+    all: ['Rede ao vivo · simulação', 'Live network · simulation'],
+    infra: ['Rede · foco em servidores e redes', 'Network · focus on servers and networks'],
+    sistemas: ['Rede · foco no ERP e no e-mail', 'Network · focus on ERP and e-mail'],
+    suporte: ['Rede · chamados chegando dos usuários', 'Network · tickets coming from users'],
+    dev: ['Rede · sistemas conversando com o ERP', 'Network · apps talking to the ERP'],
+    contato: ['Rede · saída para a internet', 'Network · route to the internet']
+  };
+  let mode = 'all';
+  function renderMode() { if (hudText) hudText.textContent = T(MODES[mode][0], MODES[mode][1]); }
+  function setMode(m) {
+    mode = MODES[m] ? m : 'all';
+    if (window.netBg) window.netBg.setMode(mode);
+    renderMode();
+  }
+  if ('IntersectionObserver' in window) {
+    const seen = new Map();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => seen.set(e.target, e.isIntersecting));
+      // the deepest marked element crossing the middle of the screen wins
+      let pickEl = null;
+      seen.forEach((on, el) => { if (on && (!pickEl || pickEl.contains(el))) pickEl = el; });
+      setMode(pickEl ? pickEl.getAttribute('data-net') : 'all');
+    }, { rootMargin: '-48% 0px -48% 0px' });
+    document.querySelectorAll('[data-part] [data-net], [data-part][data-net]').forEach(el => {
+      if (!el.closest('.pv-site')) io.observe(el);
+    });
+  }
+
+  /* ---------- terminal ---------- */
+  const term = document.getElementById('term');
+  const out = document.getElementById('term-out');
+  const form = document.getElementById('term-form');
+  const input = document.getElementById('term-input');
+  const openBtn = document.getElementById('btn-term');
+  const closeBtn = document.getElementById('term-close');
+  const hist = []; let hi = 0;
+  function line(text, cls) {
+    const d = document.createElement('div');
+    if (cls) d.className = cls;
+    d.textContent = text;
+    out.appendChild(d);
+    out.scrollTop = out.scrollHeight;
+  }
+  function welcome() {
+    line(T('Terminal de demonstração · as respostas são simuladas.', 'Demo terminal · responses are simulated.'), 'dim');
+    line(T('Digite "ajuda" para ver os comandos.', 'Type "help" to see the commands.'), 'dim');
+  }
+  const HOSTS = () => (window.netBg ? window.netBg.names() : []);
+  function findHost(h) {
+    if (!h) return null;
+    const up = h.toUpperCase();
+    return HOSTS().find(n => n === up) || null;
+  }
+  const ms = () => (Math.random() * 3 + 0.6).toFixed(1);
+  const CMDS = {
+    ajuda: () => [
+      T('Comandos:', 'Commands:'),
+      '  sobre          ' + T('quem sou eu', 'who I am'),
+      '  habilidades    ' + T('o que eu faço', 'what I do'),
+      '  experiencia    ' + T('onde trabalho e onde estudei', 'where I work and studied'),
+      '  contato        ' + T('como falar comigo', 'how to reach me'),
+      '  rede           ' + T('lista os aparelhos da rede do fundo', 'lists the devices in the background network'),
+      '  ping <host>    ' + T('ex.: ping srv-erp', 'e.g. ping srv-erp'),
+      '  traceroute <host>',
+      '  limpar         ' + T('limpa a tela', 'clears the screen'),
+      '  sair           ' + T('fecha o terminal', 'closes the terminal')
+    ],
+    sobre: () => [
+      'Higor Mendonça',
+      T('Analista de Infraestrutura · Redes, Servidores e Suporte', 'Infrastructure Analyst · Networks, Servers and Support'),
+      T('Indaiatuba, SP · Woodpel Embalagens · Fatec Indaiatuba', 'Indaiatuba, SP, Brazil · Woodpel Embalagens · Fatec Indaiatuba')
+    ],
+    habilidades: () => [
+      T('- Administração de servidores', '- Server administration'),
+      T('- Administração do ambiente Microsoft', '- Microsoft environment administration'),
+      T('- E-mail corporativo', '- Corporate e-mail'),
+      T('- Suporte ao ERP', '- ERP support'),
+      T('- Sistema de chamados e apoio ao usuário', '- Ticketing system and user support'),
+      T('- Apoio na infraestrutura de redes', '- Network infrastructure support'),
+      T('- Configuração de equipamentos', '- Equipment setup'),
+      T('- Desenvolvimento de sistemas (em formação na Fatec)', '- Software development (studying at Fatec)')
+    ],
+    experiencia: () => [
+      T('Woodpel Embalagens · Analista de Infraestrutura (atual)', 'Woodpel Embalagens · Infrastructure Analyst (current)'),
+      T('Fatec Indaiatuba · Tecnólogo em ADS (2024–2027)', 'Fatec Indaiatuba · Systems Analysis and Development (2024–2027)')
+    ],
+    contato: () => ['LinkedIn: linkedin.com/in/higor-mendonça'],
+    rede: () => {
+      const names = HOSTS();
+      return [T(names.length + ' aparelhos na rede simulada:', names.length + ' devices in the simulated network:'), names.join('  ')];
+    },
+    whoami: () => [T('visitante', 'visitor')],
+    limpar: () => { out.innerHTML = ''; return []; },
+    sair: () => { closeTerm(); return []; }
+  };
+  const ALIAS = { help: 'ajuda', about: 'sobre', skills: 'habilidades', experience: 'experiencia', 'experiência': 'experiencia', contact: 'contato', network: 'rede', clear: 'limpar', cls: 'limpar', exit: 'sair' };
+  function run(raw) {
+    const [c0, arg] = raw.trim().split(/\s+/);
+    if (!c0) return;
+    const c = ALIAS[c0.toLowerCase()] || c0.toLowerCase();
+    line('$ ' + raw, 'cmd');
+    if (c === 'ping' || c === 'traceroute' || c === 'tracert') {
+      const host = findHost(arg);
+      if (!host) { line(T('Host desconhecido. Tente: srv-erp, srv-chamados, internet, core-01, fw-01', 'Unknown host. Try: srv-erp, srv-chamados, internet, core-01, fw-01'), 'warn'); return; }
+      if (c === 'ping') {
+        window.netBg && window.netBg.ping(null, host);
+        line(T('Disparando ' + host + ' com 32 bytes de dados (simulado):', 'Pinging ' + host + ' with 32 bytes of data (simulated):'));
+        for (let i = 0; i < 4; i++) setTimeout(() => {
+          line(T('Resposta de ' + host + ': bytes=32 tempo=' + ms() + 'ms TTL=128', 'Reply from ' + host + ': bytes=32 time=' + ms() + 'ms TTL=128'), 'ok');
+          if (i === 3) line(T('Pacotes: enviados = 4, recebidos = 4, perdidos = 0 (0% de perda)', 'Packets: sent = 4, received = 4, lost = 0 (0% loss)'), 'dim');
+        }, 450 * (i + 1));
+      } else {
+        const hops = window.netBg ? window.netBg.route(null, host) : null;
+        line(T('Rastreando a rota para ' + host + ' (simulado):', 'Tracing route to ' + host + ' (simulated):'));
+        (hops || []).slice(1).forEach((h, i) => setTimeout(() => line('  ' + (i + 1) + '   ' + ms() + ' ms   ' + h, 'ok'), 350 * (i + 1)));
+        window.netBg && window.netBg.ping(hops ? hops[0] : null, host);
+      }
+      return;
+    }
+    if (CMDS[c]) { CMDS[c]().forEach(t => line(t)); return; }
+    line(T('Comando não encontrado: ' + c0 + '. Digite "ajuda".', 'Command not found: ' + c0 + '. Type "help".'), 'warn');
+  }
+  function openTerm() {
+    if (!term) return;
+    term.hidden = false;
+    if (!out.childElementCount) welcome();
+    input.focus();
+  }
+  function closeTerm() { term.hidden = true; if (openBtn) openBtn.focus(); }
+  if (openBtn) openBtn.addEventListener('click', () => (term.hidden ? openTerm() : closeTerm()));
+  if (closeBtn) closeBtn.addEventListener('click', closeTerm);
+  if (form) form.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = input.value;
+    if (v.trim()) { hist.push(v); hi = hist.length; }
+    input.value = '';
+    run(v);
+  });
+  if (input) input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp' && hi > 0) { hi--; input.value = hist[hi]; e.preventDefault(); }
+    else if (e.key === 'ArrowDown') { hi = Math.min(hist.length, hi + 1); input.value = hist[hi] || ''; e.preventDefault(); }
+    else if (e.key === 'Escape') closeTerm();
+  });
+
+  /* ---------- start ---------- */
+  document.addEventListener('langchange', () => { renderPause(); renderMode(); });
+  setPaused(store.get('anim-paused') === '1');
+  translate(store.get('site-lang') === 'en' ? 'en' : 'pt');
 })();
 </script>
