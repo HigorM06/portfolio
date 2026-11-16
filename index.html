@@ -28,6 +28,7 @@
   --radius: 10px;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; } }
 body {
@@ -548,7 +549,7 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
   </div>
 </section>
 
-<footer data-part>
+<footer data-part data-net="contato">
   <div class="inner"><span>Higor Mendonça · Analista de Infraestrutura</span><span>Indaiatuba, SP</span></div>
 </footer>
 
@@ -1335,19 +1336,31 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
     if (window.netBg) window.netBg.setMode(mode);
     renderMode();
   }
-  if ('IntersectionObserver' in window) {
-    const seen = new Map();
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => seen.set(e.target, e.isIntersecting));
-      // the deepest marked element crossing the middle of the screen wins
-      let pickEl = null;
-      seen.forEach((on, el) => { if (on && (!pickEl || pickEl.contains(el))) pickEl = el; });
-      setMode(pickEl ? pickEl.getAttribute('data-net') : 'all');
-    }, { rootMargin: '-48% 0px -48% 0px' });
-    document.querySelectorAll('[data-part] [data-net], [data-part][data-net]').forEach(el => {
-      if (!el.closest('.pv-site')) io.observe(el);
+  // the section crossing the middle of the screen sets the focus; side-by-side cards are decided by the mouse
+  const targets = Array.from(document.querySelectorAll('[data-net]')).filter(el => !el.closest('.pv-site'));
+  let mouseX = window.innerWidth / 2;
+  function pickMode() {
+    // at the very bottom the middle of the screen can never reach the last sections, so look lower
+    const atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 8;
+    const cy = window.innerHeight * (atEnd ? 0.8 : 0.5);
+    let best = null, bestDepth = -1, bestDx = Infinity;
+    targets.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top > cy || r.bottom < cy) return;
+      let depth = 0, p = el;
+      while ((p = p.parentElement)) depth++;
+      const dx = Math.abs((r.left + r.right) / 2 - mouseX);
+      if (depth > bestDepth || (depth === bestDepth && dx < bestDx)) { best = el; bestDepth = depth; bestDx = dx; }
     });
+    const m = best ? best.getAttribute('data-net') : 'all';
+    if (m !== mode) setMode(m);
   }
+  let raf = 0;
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; pickMode(); }); };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('mousemove', e => { mouseX = e.clientX; schedule(); }, { passive: true });
+  setTimeout(pickMode, 0);
 
   /* ---------- terminal ---------- */
   const term = document.getElementById('term');
