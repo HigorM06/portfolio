@@ -1,0 +1,56 @@
+# Publica o portfólio no GitHub Pages a cada push na branch main.
+# O index.html do repositório é escrito no formato de artifact do claude.ai (sem <!doctype>, <head> e <body>),
+# então este passo monta a página completa: tudo até o primeiro </style> vai para o <head>, o resto para o <body>.
+name: Publicar site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Montar a página completa
+        run: |
+          mkdir -p _site
+          tr -d '\r' < index.html > /tmp/src.html
+          cut=$(grep -n '</style>' /tmp/src.html | head -1 | cut -d: -f1)
+          {
+            echo '<!doctype html>'
+            echo '<html lang="pt-BR">'
+            echo '<head>'
+            echo '<meta charset="utf-8">'
+            echo '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+            echo '<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>'
+            head -n "$cut" /tmp/src.html
+            echo '</head>'
+            echo '<body>'
+            tail -n +"$((cut + 1))" /tmp/src.html
+            echo '</body>'
+            echo '</html>'
+          } > _site/index.html
+          cp foto-avatar.jpg _site/
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4
