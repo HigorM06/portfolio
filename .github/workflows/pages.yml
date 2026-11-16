@@ -45,7 +45,7 @@ jobs:
             echo '</body>'
             echo '</html>'
           } > _site/index.html
-          cp foto-avatar.jpg _site/
+          cp foto-avatar.jpg compartilhar.png _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
