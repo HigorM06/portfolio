@@ -264,7 +264,8 @@ h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 3.4
 /* stack */
 .stack { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 40px; }
 .tool { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: center; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
-.tool .ico { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; background: var(--ink); color: var(--bg); font-family: var(--f-mono); font-size: 12px; font-weight: 500; }
+.tool .ico { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line); }
+.tool .ico svg { width: 22px; height: 22px; display: block; }
 .tool b { display: block; font-weight: 600; font-size: 15px; line-height: 1.3; }
 .tool small { display: block; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .stack-title { font-family: var(--f-display); font-size: 20px; font-weight: 600; margin: 56px 0 0; }
@@ -469,12 +470,12 @@ footer .inner { display: flex; justify-content: space-between; gap: 12px; flex-w
 
       <h3 class="stack-title">Ferramentas e sistemas do dia a dia</h3>
       <div class="stack">
-        <div class="tool"><span class="ico" aria-hidden="true">MS</span><div><b>Microsoft</b><small>Administração do ambiente</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true">@</span><div><b>E-mail corporativo</b><small>Contas e acessos</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true">ERP</span><div><b>ERP</b><small>Sistema de gestão da indústria</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true">#</span><div><b>Sistema de chamados</b><small>Registro e acompanhamento</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true">SRV</span><div><b>Servidores</b><small>Administração</small></div></div>
-        <div class="tool"><span class="ico" aria-hidden="true">LAN</span><div><b>Redes</b><small>Apoio à infraestrutura</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8.5" height="8.5" fill="#f25022"/><rect x="12.5" y="3" width="8.5" height="8.5" fill="#7fba00"/><rect x="3" y="12.5" width="8.5" height="8.5" fill="#00a4ef"/><rect x="12.5" y="12.5" width="8.5" height="8.5" fill="#ffb900"/></svg></span><div><b>Microsoft</b><small>Administração do ambiente</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6 8.5-6"/></svg></span><div><b>E-mail corporativo</b><small>Contas e acessos</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.8"/><path d="M4 5.5v13c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8v-13"/><path d="M4 12c0 1.5 3.6 2.8 8 2.8s8-1.3 8-2.8"/></svg></span><div><b>ERP</b><small>Sistema de gestão da indústria</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5z"/><path d="M15 6.5v11" stroke-dasharray="1.5 2.2"/><path d="M7 10.5h5M7 13.5h3"/></svg></span><div><b>Sistema de chamados</b><small>Registro e acompanhamento</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="7" rx="1.5"/><rect x="3" y="13.5" width="18" height="7" rx="1.5"/><path d="M7 7h.01M7 17h.01M11 7h6M11 17h6"/></svg></span><div><b>Servidores</b><small>Administração</small></div></div>
+        <div class="tool"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="5" rx="1"/><rect x="2.5" y="16.5" width="6" height="5" rx="1"/><rect x="15.5" y="16.5" width="6" height="5" rx="1"/><path d="M12 7.5v4.5M5.5 16.5V13h13v3.5"/></svg></span><div><b>Redes</b><small>Apoio à infraestrutura</small></div></div>
       </div>
     </div>
   </section>
