@@ -262,7 +262,9 @@ h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 3.4
 .area .tag { justify-self: start; font-family: var(--f-mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; background: var(--surface-2); color: var(--muted); }
 
 /* stack */
-.stack { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 40px; }
+.stack { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 40px; }
+@media (max-width: 860px) { .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .stack { grid-template-columns: 1fr; } }
 .tool { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: center; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
 .tool .ico { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line); }
 .tool .ico svg { width: 22px; height: 22px; display: block; }
